@@ -47,6 +47,14 @@ g_qpid_session_create_receiver(GQpidSession *session, gchar *add)
     return rcv;
 }
 
+gint
+g_qpid_session_get_receivable (GQpidSession *s)
+{
+    g_return_val_if_fail (s != NULL, -1);
+
+    return s->session.getReceivable();
+}
+
 void
 g_qpid_session_acknowledge(GQpidSession *session)
 {
