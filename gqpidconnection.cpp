@@ -57,3 +57,13 @@ g_qpid_connection_close(GQpidConnection *conn)
     conn->conn.close ();
 }
 
+gboolean
+g_qpid_connection_is_open(GQpidConnection *conn)
+{
+
+    g_return_val_if_fail (conn != NULL, FALSE);
+
+    gboolean b = conn->conn.isOpen();
+    return b;
+
+}
