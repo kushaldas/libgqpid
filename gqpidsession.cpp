@@ -6,6 +6,7 @@
 #include <gqpidsession.h>
 #include <gqpidsender.h>
 #include <gqpidreceiver.h>
+#include <gqpidmessage.h>
 
 using namespace qpid::messaging;
 
@@ -45,12 +46,22 @@ g_qpid_session_create_receiver(GQpidSession *session, gchar *add)
 
     return rcv;
 }
+
 void
 g_qpid_session_acknowledge(GQpidSession *session)
 {
     g_return_if_fail (session != NULL);
 
     session->session.acknowledge();
+    return;
+}
+
+void
+g_qpid_session_reject(GQpidSession *session, GQpidMessage *msg)
+{
+    g_return_if_fail (session != NULL);
+
+    g_qpid_message_reject_session (msg, session->session);
     return;
 }
 

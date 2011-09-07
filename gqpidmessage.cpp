@@ -61,5 +61,15 @@ g_qpid_message_send(GQpidMessage *msg, Sender &s)
     g_return_if_fail (msg != NULL);
 
     s.send(msg->msg);
+    return;
+}
 
+void
+g_qpid_message_reject_session(GQpidMessage *msg, Session &s)
+{
+
+    g_return_if_fail (msg != NULL);
+
+    s.reject(msg->msg);
+    return;
 }
