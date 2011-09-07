@@ -48,15 +48,6 @@ g_qpid_connection_create_session(GQpidConnection *conn)
     return session;
 }
 
-void
-g_qpid_connection_close(GQpidConnection *conn)
-{
-
-    g_return_if_fail (conn != NULL);
-
-    conn->conn.close ();
-}
-
 gboolean
 g_qpid_connection_is_open(GQpidConnection *conn)
 {
@@ -66,4 +57,20 @@ g_qpid_connection_is_open(GQpidConnection *conn)
     gboolean b = conn->conn.isOpen();
     return b;
 
+}
+
+void
+g_qpid_connection_close(GQpidConnection *conn)
+{
+
+    g_return_if_fail (conn != NULL);
+
+    conn->conn.close ();
+}
+
+
+void
+g_qpid_connection_free(GQpidConnection *conn)
+{
+    delete conn;
 }
