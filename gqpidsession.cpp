@@ -54,3 +54,18 @@ g_qpid_session_acknowledge(GQpidSession *session)
     return;
 }
 
+void
+g_qpid_session_close(GQpidSession *session)
+{
+
+    g_return_if_fail (session != NULL);
+
+    session->session.close ();
+}
+
+
+void
+g_qpid_session_free(GQpidSession *session)
+{
+    delete session;
+}
