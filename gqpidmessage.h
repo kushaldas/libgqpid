@@ -15,6 +15,7 @@ extern "C" {
 #endif
 GQpidMessage*                   g_qpid_message_new              (gchar*);
 const gchar*                    g_qpid_message_get_content      (GQpidMessage *);
+void                            g_qpid_message_set_subject      (GQpidMessage *, const gchar *);
 #ifdef __cplusplus
 }
 #endif

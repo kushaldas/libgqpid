@@ -61,15 +61,32 @@ g_qpid_message_new_from_msg(Message &m)
  * Return value: it returns the message string as gchar*.
  **/
 const gchar*
-g_qpid_message_get_content(GQpidMessage *msg)
+g_qpid_message_get_content (GQpidMessage *msg)
 {
 
     g_return_val_if_fail (msg != NULL, NULL);
 
-    std::string s = msg->msg.getContent();
+    std::string s = msg->msg.getContent ();
 
-    return s.c_str();
+    return s.c_str ();
 }
+
+/**
+ * g_qpid_message_set_subject:
+ * @msg: a #GQpidMessage* object
+ * @text: const gchar* of the actual subject
+ *
+ * Sets the given subject to the message.
+ **/
+ void
+ g_qpid_message_set_subject (GQpidMessage *msg, const gchar *text)
+ {
+
+    g_return_if_fail (msg != NULL);
+
+    msg->msg.setSubject (text);
+    return;
+ }
 
 void
 g_qpid_message_send(GQpidMessage *msg, Sender &s)
