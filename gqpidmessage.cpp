@@ -24,7 +24,16 @@ struct _GQpidMessage
     }
 };
 
-
+/**
+ * g_qpid_message_new:
+ * @text: the message text
+ *
+ * Creates a new message with the given text.
+ *
+ * Return value: a newly allocated #GQpidMessage.
+ *   You must free it with g_qpid_message_free() when
+ *   are finished with it.
+ **/
 GQpidMessage*
 g_qpid_message_new(gchar* text)
 {
@@ -43,6 +52,14 @@ g_qpid_message_new_from_msg(Message &m)
     return msg;
 }
 
+/**
+ * g_qpid_message_get_content:
+ * @msg: a #GQpidMessage* object
+ *
+ * Gets the content of the message.
+ *
+ * Return value: it returns the message string as gchar*.
+ **/
 const gchar*
 g_qpid_message_get_content(GQpidMessage *msg)
 {
