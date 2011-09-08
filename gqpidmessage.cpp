@@ -88,6 +88,23 @@ g_qpid_message_get_content (GQpidMessage *msg)
     return;
  }
 
+/**
+ * g_qpid_message_get_subject:
+ * @msg: a #GQpidMessage* object
+ *
+ * Gets the subject of the given message.
+ *
+ * Return value: a gchar* pointing to the subject of the mesaage.
+ **/
+ const gchar*
+ g_qpid_message_get_subject (GQpidMessage *msg)
+ {
+
+    g_return_val_if_fail (msg != NULL, NULL);
+
+    std::string s = msg->msg.getSubject ();
+    return s.c_str ();
+ }
 void
 g_qpid_message_send(GQpidMessage *msg, Sender &s)
 {
