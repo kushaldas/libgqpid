@@ -12,14 +12,14 @@ struct _GQpidReceiver
 {
     Receiver rcv;
 
-    _GQpidReceiver(Session &s, const gchar *add)
+    _GQpidReceiver (Session &s, const gchar *add)
     {
-        rcv = s.createReceiver(add);
+        rcv = s.createReceiver (add);
     }
 };
 
 GQpidReceiver*
-g_qpid_receiver_new(Session &s, const gchar *add)
+g_qpid_receiver_new (Session &s, const gchar *add)
 {
     GQpidReceiver *rcv;
     rcv = new GQpidReceiver (s, add);
@@ -27,12 +27,21 @@ g_qpid_receiver_new(Session &s, const gchar *add)
     return rcv;
 }
 
-
+/**
+ * g_qpid_receiver_fetch:
+ * @rcv: a #GQpidReceiver* object
+ * @duration: number of seconds as duration, pass -1 for
+ *            FOREVER waiting.
+ *
+ * Fetches a message.
+ *
+ * Return value: a new created #GQpidMessage* instance.
+ **/
 GQpidMessage*
-g_qpid_receiver_fetch(GQpidReceiver *rcv, int duration)
+g_qpid_receiver_fetch (GQpidReceiver *rcv, int duration)
 {
     g_return_val_if_fail (rcv !=NULL, NULL);
-    Message m = rcv->rcv.fetch(Duration::SECOND * duration);
+    Message m = rcv->rcv.fetch (Duration::SECOND * duration);
     return g_qpid_message_new_from_msg (m);
 }
 
