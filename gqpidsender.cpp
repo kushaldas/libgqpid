@@ -14,7 +14,7 @@ struct _GQpidSender
 
     _GQpidSender(Session &s, const gchar *add)
     {
-        sender = s.createSender(add);
+        sender = s.createSender (add);
     }
 };
 
@@ -27,13 +27,20 @@ g_qpid_sender_new (Session &s, const gchar *add)
     return sender;
 }
 
+/**
+ * g_qpid_sender_send:
+ * @sender: a #GQpidSender* object
+ * @msg: a #GQpidMessage object which to be send
+ *
+ * It sends the message.
+ **/
 void
 g_qpid_sender_send (GQpidSender *sender,
                     GQpidMessage  *msg)
 {
     g_return_if_fail (msg != NULL);
 
-    g_qpid_message_send(msg, sender->sender);
+    g_qpid_message_send (msg, sender->sender);
 }
 
 
