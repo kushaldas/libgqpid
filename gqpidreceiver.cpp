@@ -41,6 +41,11 @@ GQpidMessage*
 g_qpid_receiver_fetch (GQpidReceiver *rcv, int duration)
 {
     g_return_val_if_fail (rcv !=NULL, NULL);
+    if (duration == -1)
+    {
+        Message m = rcv->rcv.fetch (Duration::FOREVER);
+        return g_qpid_message_new_from_msg (m);
+    }
     Message m = rcv->rcv.fetch (Duration::SECOND * duration);
     return g_qpid_message_new_from_msg (m);
 }
