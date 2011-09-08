@@ -16,6 +16,7 @@ extern "C" {
 GQpidSender*            g_qpid_session_create_sender    (GQpidSession*, gchar*);
 GQpidReceiver*          g_qpid_session_create_receiver  (GQpidSession*, gchar*);
 gint                    g_qpid_session_get_receivable   (GQpidSession *);
+void                    g_qpid_session_release          (GQpidSession *, GQpidMessage *);
 void                    g_qpid_session_reject           (GQpidSession *, GQpidMessage *);
 void                    g_qpid_session_acknowledge      (GQpidSession*);
 void                    g_qpid_session_close            (GQpidSession*);

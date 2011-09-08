@@ -65,6 +65,15 @@ g_qpid_session_acknowledge(GQpidSession *session)
 }
 
 void
+g_qpid_session_release(GQpidSession *session, GQpidMessage *msg)
+{
+    g_return_if_fail (session != NULL);
+
+    g_qpid_message_release_session (msg, session->session);
+    return;
+}
+
+void
 g_qpid_session_reject(GQpidSession *session, GQpidMessage *msg)
 {
     g_return_if_fail (session != NULL);

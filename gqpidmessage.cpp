@@ -73,3 +73,13 @@ g_qpid_message_reject_session(GQpidMessage *msg, Session &s)
     s.reject(msg->msg);
     return;
 }
+
+void
+g_qpid_message_release_session(GQpidMessage *msg, Session &s)
+{
+
+    g_return_if_fail (msg != NULL);
+
+    s.release(msg->msg);
+    return;
+}
