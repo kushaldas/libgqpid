@@ -78,15 +78,15 @@ g_qpid_message_get_content (GQpidMessage *msg)
  *
  * Sets the given subject to the message.
  **/
- void
- g_qpid_message_set_subject (GQpidMessage *msg, const gchar *text)
- {
+void
+g_qpid_message_set_subject (GQpidMessage *msg, const gchar *text)
+{
 
-    g_return_if_fail (msg != NULL);
+g_return_if_fail (msg != NULL);
 
-    msg->msg.setSubject (text);
-    return;
- }
+msg->msg.setSubject (text);
+return;
+}
 
 /**
  * g_qpid_message_get_subject:
@@ -96,15 +96,50 @@ g_qpid_message_get_content (GQpidMessage *msg)
  *
  * Return value: a gchar* pointing to the subject of the mesaage.
  **/
- const gchar*
- g_qpid_message_get_subject (GQpidMessage *msg)
- {
+const gchar*
+g_qpid_message_get_subject (GQpidMessage *msg)
+{
+
+g_return_val_if_fail (msg != NULL, NULL);
+
+std::string s = msg->msg.getSubject ();
+return s.c_str ();
+}
+
+/**
+ * g_qpid_message_set_content_type:
+ * @msg: a #GQpidMessage* object
+ * @text: the content type string
+ *
+ * Sets the message content type
+ **/
+void
+g_qpid_message_set_content_type (GQpidMessage *msg, const gchar *text)
+{
+
+    g_return_if_fail (msg != NULL);
+
+    if (text != NULL)
+        msg->msg.setContentType (text);
+}
+
+/**
+ * g_qpid_message_get_content_type:
+ * @msg: a #GQpidMessage* object
+ *
+ * Gets the message content type
+ * Return value: a const gchar* holding the content type.
+ **/
+const gchar*
+g_qpid_message_get_content_type (GQpidMessage *msg)
+{
 
     g_return_val_if_fail (msg != NULL, NULL);
 
-    std::string s = msg->msg.getSubject ();
-    return s.c_str ();
- }
+    std::string s = msg->msg.getContentType ();
+    return s.c_str();
+}
+
 void
 g_qpid_message_send(GQpidMessage *msg, Sender &s)
 {

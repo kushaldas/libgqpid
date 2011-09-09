@@ -17,6 +17,8 @@ GQpidMessage*                   g_qpid_message_new              (gchar*);
 const gchar*                    g_qpid_message_get_content      (GQpidMessage *);
 void                            g_qpid_message_set_subject      (GQpidMessage *, const gchar *);
 const gchar*                    g_qpid_message_get_subject      (GQpidMessage *);
+void                            g_qpid_message_set_content_type (GQpidMessage *, const gchar *);
+const gchar*                    g_qpid_message_get_content_type (GQpidMessage *);
 #ifdef __cplusplus
 }
 #endif
