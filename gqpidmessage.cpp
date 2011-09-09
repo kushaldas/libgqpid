@@ -140,6 +140,23 @@ g_qpid_message_get_content_type (GQpidMessage *msg)
     return s.c_str();
 }
 
+/**
+ * g_qpid_message_set_userid:
+ * @msg: a #GQpidMessage* object
+ * @text: the userid as gchar*
+ *
+ * Sets the useid of the message
+ **/
+void
+g_qpid_message_set_userid (GQpidMessage *msg, const gchar *text)
+{
+
+    g_return_if_fail (msg != NULL);
+
+    if (text != NULL)
+        msg->msg.setUserId (text);
+}
+
 void
 g_qpid_message_send(GQpidMessage *msg, Sender &s)
 {
