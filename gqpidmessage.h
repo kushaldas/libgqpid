@@ -20,6 +20,7 @@ const gchar*                    g_qpid_message_get_subject      (GQpidMessage *)
 void                            g_qpid_message_set_content_type (GQpidMessage *, const gchar *);
 const gchar*                    g_qpid_message_get_content_type (GQpidMessage *);
 void                            g_qpid_message_set_userid       (GQpidMessage *, const gchar *);
+const gchar*                    g_qpid_message_get_userid       (GQpidMessage *);
 #ifdef __cplusplus
 }
 #endif

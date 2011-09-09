@@ -157,6 +157,25 @@ g_qpid_message_set_userid (GQpidMessage *msg, const gchar *text)
         msg->msg.setUserId (text);
 }
 
+/**
+ * g_qpid_message_get_userid:
+ * @msg: a #GQpidMessage* object
+ *
+ * Gets the message's userid.
+ *
+ * Return value: a const gchar* holding the userid of
+ *               message.
+ **/
+const gchar*
+g_qpid_message_get_userid (GQpidMessage *msg)
+{
+
+    g_return_val_if_fail (msg != NULL, NULL);
+
+    std::string s = msg->msg.getUserId ();
+    return s.c_str();
+}
+
 void
 g_qpid_message_send(GQpidMessage *msg, Sender &s)
 {
