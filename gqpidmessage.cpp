@@ -82,10 +82,10 @@ void
 g_qpid_message_set_subject (GQpidMessage *msg, const gchar *text)
 {
 
-g_return_if_fail (msg != NULL);
+    g_return_if_fail (msg != NULL);
 
-msg->msg.setSubject (text);
-return;
+    msg->msg.setSubject (text);
+    return;
 }
 
 /**
@@ -100,10 +100,10 @@ const gchar*
 g_qpid_message_get_subject (GQpidMessage *msg)
 {
 
-g_return_val_if_fail (msg != NULL, NULL);
+    g_return_val_if_fail (msg != NULL, NULL);
 
-std::string s = msg->msg.getSubject ();
-return s.c_str ();
+    std::string s = msg->msg.getSubject ();
+    return s.c_str ();
 }
 
 /**
