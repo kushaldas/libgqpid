@@ -176,6 +176,23 @@ g_qpid_message_get_userid (GQpidMessage *msg)
     return s.c_str();
 }
 
+/**
+ * g_qpid_message_set_priority:
+ * @msg: a #GQpidMessage* object
+ * @priority: int value
+ *
+ * Sets the priority of the message
+ **/
+void
+g_qpid_message_set_priority (GQpidMessage *msg, const int priority)
+{
+
+    g_return_if_fail (msg != NULL);
+
+    if (priority != 0)
+        msg->msg.setPriority (priority);
+}
+
 void
 g_qpid_message_send(GQpidMessage *msg, Sender &s)
 {
