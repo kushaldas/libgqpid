@@ -22,6 +22,7 @@ const gchar*                    g_qpid_message_get_content_type (GQpidMessage *)
 void                            g_qpid_message_set_userid       (GQpidMessage *, const gchar *);
 const gchar*                    g_qpid_message_get_userid       (GQpidMessage *);
 void                            g_qpid_message_set_priority     (GQpidMessage *, const int);
+const int                       g_qpid_message_get_priority     (GQpidMessage *);
 #ifdef __cplusplus
 }
 #endif

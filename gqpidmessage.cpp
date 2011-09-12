@@ -193,6 +193,24 @@ g_qpid_message_set_priority (GQpidMessage *msg, const int priority)
         msg->msg.setPriority (priority);
 }
 
+/**
+ * g_qpid_message_get_priority:
+ * @msg: a #GQpidMessage* object
+ *
+ * Gets the message's priority.
+ *
+ * Return value: an integer
+ **/
+const int
+g_qpid_message_get_priority (GQpidMessage *msg)
+{
+
+    g_return_val_if_fail (msg != NULL, -1);
+
+    int i = msg->msg.getPriority ();
+    return i;
+}
+
 void
 g_qpid_message_send(GQpidMessage *msg, Sender &s)
 {
