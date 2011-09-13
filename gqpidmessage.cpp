@@ -1,4 +1,5 @@
 #include <glib.h>
+#include <glib-object.h>
 #include <qpid/messaging/Message.h>
 #include <qpid/messaging/Receiver.h>
 #include <qpid/messaging/Sender.h>
@@ -8,6 +9,9 @@
 #include <iostream>
 
 using namespace qpid::messaging;
+using namespace qpid::types;
+
+GHashTable* _internal_createhash (Variant::Map &);
 
 struct _GQpidMessage
 {
@@ -209,6 +213,165 @@ g_qpid_message_get_priority (GQpidMessage *msg)
 
     int i = msg->msg.getPriority ();
     return i;
+}
+
+
+GList*
+_internal_createlist (Variant::List &content)
+{
+    GList *list = NULL;
+    for (Variant::List::const_iterator ci = content.begin(); ci != content.end(); ++ci)
+    {
+        Variant value = *ci;
+        GValue* v = NULL;
+        v =  g_new0 (GValue, 1);
+
+        /* Prints the Variant type
+         * for debug purpose only
+        std::cout << getTypeName(value.getType()) << std::endl;*/
+
+        if (getTypeName(value.getType()) == "string")
+        {
+            g_value_init (v, G_TYPE_STRING);
+            std::string s = value.getString();
+            g_value_set_string (v,(gchar*) s.c_str());
+        }else if (getTypeName(value.getType()) == "double")
+        {
+            g_value_init (v, G_TYPE_DOUBLE);
+            double f = value.asDouble ();
+            g_value_set_double (v, f);
+        }else if (getTypeName(value.getType()) == "int64")
+        {
+            g_value_init (v, G_TYPE_INT64);
+            gint64 f = value.asInt64 ();
+            g_value_set_int64 (v, f);
+        }else if (getTypeName(value.getType()) == "bool")
+        {
+            g_value_init (v, G_TYPE_BOOLEAN);
+            gboolean b = value.asBool ();
+            g_value_set_boolean (v, b);
+        }else if (getTypeName(value.getType()) == "map")
+        {
+
+            GHashTable* h;
+            g_value_init (v, G_TYPE_HASH_TABLE);
+            Variant::Map m = value.asMap ();
+
+            h = _internal_createhash (m);
+
+            g_value_set_boxed (v, h);
+        }else if (getTypeName(value.getType()) == "list")
+        {
+
+            GList* h;
+            g_value_init (v, G_TYPE_POINTER);
+            Variant::List l = value.asList ();
+
+            h = _internal_createlist (l);
+
+            g_value_set_pointer (v, h);
+        }
+        list = g_list_append (list, v);
+
+    }
+    return list;
+}
+
+
+GHashTable*
+_internal_createhash (Variant::Map &content)
+{
+    GHashTable* hash;
+    hash =  g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+    for(std::map<std::string, Variant>::iterator it = content.begin(); it != content.end(); ++it)
+    {
+        std::string key  = it->first;
+        Variant value = it->second;
+        GValue* v = NULL;
+        v =  g_new0 (GValue, 1);
+
+        gchar *k = (gchar*) key.c_str();
+        /* Prints the Variant type
+         * for debug purpose only
+        std::cout << getTypeName(value.getType()) << std::endl;*/
+
+        if (getTypeName(value.getType()) == "string")
+        {
+            g_value_init (v, G_TYPE_STRING);
+            std::string s = value.getString();
+            g_value_set_string (v,(gchar*) s.c_str());
+            g_hash_table_insert (hash, k, v);
+        }else if (getTypeName(value.getType()) == "double")
+        {
+            g_value_init (v, G_TYPE_DOUBLE);
+            double f = value.asDouble ();
+            g_value_set_double (v, f);
+            g_hash_table_insert (hash, k, v);
+        }else if (getTypeName(value.getType()) == "int64")
+        {
+            g_value_init (v, G_TYPE_INT64);
+            gint64 f = value.asInt64 ();
+            g_value_set_int64 (v, f);
+            g_hash_table_insert (hash, k, v);
+        }else if (getTypeName(value.getType()) == "bool")
+        {
+            g_value_init (v, G_TYPE_BOOLEAN);
+            gboolean b = value.asBool ();
+            g_value_set_boolean (v, b);
+            g_hash_table_insert (hash, k, v);
+        }else if (getTypeName(value.getType()) == "map")
+        {
+
+            GHashTable* h;
+            g_value_init (v, G_TYPE_HASH_TABLE);
+            Variant::Map m = value.asMap ();
+
+            h = _internal_createhash (m);
+
+            g_value_set_boxed (v, h);
+            g_hash_table_insert (hash, k, v);
+        }else if (getTypeName(value.getType()) == "list")
+        {
+
+            GList* h;
+            g_value_init (v, G_TYPE_POINTER);
+            Variant::List l = value.asList ();
+
+            h = _internal_createlist (l);
+
+            g_value_set_pointer (v, h);
+            g_hash_table_insert (hash, k, v);
+        }
+
+
+    }
+
+    return hash;
+}
+
+/**
+ * g_qpid_message_get_hashtable:
+ * @msg: a #GQpidMessage* object
+ *
+ * Gets the message's content as a GHashTable*.
+ *
+ * Return value: GHashTable*
+ **/
+GHashTable*
+g_qpid_message_get_hashtable (GQpidMessage *msg)
+{
+
+    g_return_val_if_fail (msg != NULL, NULL);
+    Variant::Map content;
+
+    GHashTable* hash = NULL;
+
+    decode(msg->msg, content);
+
+    hash = _internal_createhash (content);
+
+    return hash;
+
 }
 
 void

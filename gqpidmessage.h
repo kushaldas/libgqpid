@@ -2,6 +2,9 @@
 
 #ifdef __cplusplus
 #include <qpid/messaging/Sender.h>
+#include <qpid/messaging/Receiver.h>
+#include <qpid/messaging/Session.h>
+#include <qpid/messaging/Connection.h>
 #include <qpid/messaging/Message.h>
 #endif
 
@@ -9,7 +12,7 @@ typedef struct _GQpidMessage GQpidMessage;
 #ifdef __cplusplus
 void                            g_qpid_message_send             (GQpidMessage *, qpid::messaging::Sender&);
 GQpidMessage*                   g_qpid_message_new_from_msg     (qpid::messaging::Message&);
-void                            g_qpid_message_release_session   (GQpidMessage *, qpid::messaging::Session&);
+void                            g_qpid_message_release_session  (GQpidMessage *, qpid::messaging::Session&);
 void                            g_qpid_message_reject_session   (GQpidMessage *, qpid::messaging::Session&);
 extern "C" {
 #endif
@@ -23,6 +26,7 @@ void                            g_qpid_message_set_userid       (GQpidMessage *,
 const gchar*                    g_qpid_message_get_userid       (GQpidMessage *);
 void                            g_qpid_message_set_priority     (GQpidMessage *, const int);
 const int                       g_qpid_message_get_priority     (GQpidMessage *);
+GHashTable*                     g_qpid_message_get_hashtable    (GQpidMessage *);
 #ifdef __cplusplus
 }
 #endif
