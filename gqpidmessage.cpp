@@ -6,12 +6,14 @@
 #include <qpid/messaging/Session.h>
 #include <qpid/messaging/Connection.h>
 #include <gqpidmessage.h>
+#include <string.h>
 #include <iostream>
 
 using namespace qpid::messaging;
 using namespace qpid::types;
 
 GHashTable* _internal_createhash (Variant::Map &);
+void _send_createcontent (Variant::Map &content, GHashTable *hash);
 
 struct _GQpidMessage
 {
@@ -26,7 +28,31 @@ struct _GQpidMessage
     {
 
     }
+
+    _GQpidMessage(): msg()
+    {
+
+    }
+
 };
+
+/**
+ * g_qpid_message_new_empty:
+ *
+ * Creates a new message.
+ *
+ * Return value: a newly allocated #GQpidMessage.
+ *   You must free it with g_qpid_message_free() when
+ *   are finished with it.
+ **/
+GQpidMessage*
+g_qpid_message_new_empty ()
+{
+    GQpidMessage *msg;
+    msg = new GQpidMessage ();
+
+    return msg;
+}
 
 /**
  * g_qpid_message_new:
@@ -371,7 +397,147 @@ g_qpid_message_get_hashtable (GQpidMessage *msg)
     hash = _internal_createhash (content);
 
     return hash;
+}
 
+/**
+ * g_qpid_message_get_list:
+ * @msg: a #GQpidMessage* object
+ *
+ * Gets the message's content as a GList*.
+ *
+ * Return value: GList*
+ **/
+GList*
+g_qpid_message_get_list (GQpidMessage *msg)
+{
+
+    g_return_val_if_fail (msg != NULL, NULL);
+    Variant::List content;
+
+    GList* list = NULL;
+
+    decode(msg->msg, content);
+
+    list = _internal_createlist (content);
+
+    return list;
+}
+
+void
+_send_createlist (Variant::List &content, GList *list)
+{
+    while(1)
+    {
+        GValue *value = (GValue*) list->data;
+
+        //std::cout << G_VALUE_TYPE_NAME (value) << std::endl;
+        /* do something with key and value */
+        if (strcmp ("gchararray", G_VALUE_TYPE_NAME (value)) == 0 ) {
+            content.push_back (g_value_get_string ((GValue*)value));
+        }
+        if (strcmp("gdouble", G_VALUE_TYPE_NAME (value)) == 0)
+            content.push_back (g_value_get_double ((GValue*)value));
+        if (strcmp("gint64", G_VALUE_TYPE_NAME (value)) == 0)
+            content.push_back (g_value_get_int64 ((GValue*)value));
+        if (strcmp("gboolean", G_VALUE_TYPE_NAME (value)) == 0)
+            content.push_back (g_value_get_boolean ((GValue*)value));
+        if (strcmp("GHashTable", G_VALUE_TYPE_NAME (value)) == 0)
+        {
+            Variant::Map c;
+            _send_createcontent (c, (GHashTable*) g_value_get_boxed((GValue*)value));
+            content.push_back (c);
+        }
+        if ( strcmp("gpointer", G_VALUE_TYPE_NAME (value)) == 0)
+        {
+            GList* l = (GList*) g_value_get_pointer (value);
+            Variant::List list2;
+            _send_createlist (list2, l);
+            content.push_back (list2);
+        }
+        /* Check if there are more entries */
+        if (list->next == NULL)
+            break;
+        list = list->next;
+
+    }
+}
+
+void
+_send_createcontent (Variant::Map &content, GHashTable *hash)
+{
+    GHashTableIter iter;
+    gpointer key, value;
+    g_hash_table_iter_init (&iter, hash);
+
+    while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+        std::cout << G_VALUE_TYPE_NAME (value) << std::endl;
+        /* do something with key and value */
+        if (strcmp ("gchararray", G_VALUE_TYPE_NAME (value)) == 0 ) {
+            content[(gchar*) key] = g_value_get_string ((GValue*)value);
+        }
+        if (strcmp("gdouble", G_VALUE_TYPE_NAME (value)) == 0)
+            content[(gchar*) key] = g_value_get_double ((GValue*)value);
+        if (strcmp("gint64", G_VALUE_TYPE_NAME (value)) == 0)
+            content[(gchar*) key] = g_value_get_int64 ((GValue*)value);
+        if (strcmp("gboolean", G_VALUE_TYPE_NAME (value)) == 0)
+            content[(gchar*) key] = g_value_get_boolean ((GValue*)value);
+        if (strcmp("GHashTable", G_VALUE_TYPE_NAME (value)) == 0)
+        {
+            Variant::Map c;
+            _send_createcontent (c, (GHashTable*) g_value_get_boxed((GValue*)value));
+            content[(gchar*) key] = c;
+        }
+        if ( strcmp("gpointer", G_VALUE_TYPE_NAME (value)) == 0)
+        {
+            GList* l = (GList*) g_value_get_pointer ((GValue*)value);
+            Variant::List list;
+            _send_createlist (list, l);
+            content[(gchar*) key] = list;
+        }
+    }
+}
+
+/**
+ * g_qpid_message_set_hashtable:
+ * @msg: a #GQpidMessage* object
+ * @hash: a #GHashTable* object
+ *
+ * Sets the message's content as a GHashTable*.
+ **/
+void
+g_qpid_message_set_hashtable (GQpidMessage *msg, GHashTable *hash)
+{
+
+    g_return_if_fail (msg != NULL);
+    Variant::Map content;
+
+    _send_createcontent (content, hash);
+
+    encode (content, msg->msg);
+
+    return;
+}
+
+/**
+ * g_qpid_message_set_list:
+ * @msg: a #GQpidMessage* object
+ * @hash: a #GList* object
+ *
+ * Sets the message's content as a GList*.
+ **/
+void
+g_qpid_message_set_list (GQpidMessage *msg, GList *list)
+{
+
+    g_return_if_fail (msg != NULL);
+    Variant::List content;
+
+    _send_createlist (content, list);
+
+    encode (content, msg->msg);
+
+    return;
 }
 
 void
@@ -380,7 +546,7 @@ g_qpid_message_send(GQpidMessage *msg, Sender &s)
 
     g_return_if_fail (msg != NULL);
 
-    s.send(msg->msg);
+    s.send (msg->msg, true);
     return;
 }
 

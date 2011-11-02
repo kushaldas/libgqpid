@@ -16,6 +16,7 @@ void                            g_qpid_message_release_session  (GQpidMessage *,
 void                            g_qpid_message_reject_session   (GQpidMessage *, qpid::messaging::Session&);
 extern "C" {
 #endif
+GQpidMessage*                   g_qpid_message_new_empty        (void);
 GQpidMessage*                   g_qpid_message_new              (gchar*);
 const gchar*                    g_qpid_message_get_content      (GQpidMessage *);
 void                            g_qpid_message_set_subject      (GQpidMessage *, const gchar *);
@@ -27,6 +28,9 @@ const gchar*                    g_qpid_message_get_userid       (GQpidMessage *)
 void                            g_qpid_message_set_priority     (GQpidMessage *, const int);
 const int                       g_qpid_message_get_priority     (GQpidMessage *);
 GHashTable*                     g_qpid_message_get_hashtable    (GQpidMessage *);
+void                            g_qpid_message_set_hashtable    (GQpidMessage *, GHashTable *);
+GList*                          g_qpid_message_get_list         (GQpidMessage *);
+void                            g_qpid_message_set_list         (GQpidMessage *, GList *);
 #ifdef __cplusplus
 }
 #endif
