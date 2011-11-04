@@ -569,3 +569,21 @@ g_qpid_message_release_session(GQpidMessage *msg, Session &s)
     s.release(msg->msg);
     return;
 }
+
+void
+g_qpid_message_set_durable(GQpidMessage *msg, gboolean val)
+{
+    g_return_if_fail (msg != NULL);
+
+    msg->msg.setDurable(val);
+    return;
+}
+
+gboolean
+g_qpid_message_get_durable(GQpidMessage *msg)
+{
+    g_return_val_if_fail (msg != NULL, FALSE);
+
+    gboolean data = msg->msg.getDurable ();
+    return data;
+}

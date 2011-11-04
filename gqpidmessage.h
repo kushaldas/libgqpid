@@ -31,6 +31,8 @@ GHashTable*                     g_qpid_message_get_hashtable    (GQpidMessage *)
 void                            g_qpid_message_set_hashtable    (GQpidMessage *, GHashTable *);
 GList*                          g_qpid_message_get_list         (GQpidMessage *);
 void                            g_qpid_message_set_list         (GQpidMessage *, GList *);
+void                            g_qpid_message_set_durable      (GQpidMessage *, gboolean);
+gboolean                        g_qpid_message_get_durable      (GQpidMessage *);
 #ifdef __cplusplus
 }
 #endif
