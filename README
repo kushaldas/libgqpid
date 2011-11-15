@@ -1,0 +1,17 @@
+README
+======
+libgqpid is the glib binding of qpid client. The idea behind this project was
+to make sure that we will be able to use qpid directly from any C application.
+
+Design
+======
+The library is written on top of the qpid C++ client library. The following
+classes are implemented in the library still now:
+
+  * g_qpid_connection
+  * g_qpid_message
+  * g_qpid_receiver
+  * g_qpid_sender
+  * g_qpid_session
+
+The example code can be found at the examples directory.
