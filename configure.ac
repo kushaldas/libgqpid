@@ -9,6 +9,12 @@ AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_INSTALL
 
+AC_ARG_ENABLE([examples],
+	 AC_HELP_STRING([--enable-examples], [Enable building of examples]),
+	[build_examples=yes], [build_examples=no])
+
+AM_CONDITIONAL([BUILD_EXAMPLES], test "$build_examples" != "no")
+
 ac_save_LIBS="$LIBS"
 LIBS="$LIBS -lqpidmessaging"
 
@@ -27,8 +33,9 @@ AC_SUBST(QPID_LIBS)
 PKG_CHECK_MODULES(GLIB, glib-2.0)
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
-PKG_CHECK_MODULES(GOBJECT, glib-2.0)
+
+PKG_CHECK_MODULES(GOBJECT, gobject-2.0)
 AC_SUBST(GOBJECT_CFLAGS)
 AC_SUBST(GOBJECT_LIBS)
 
-AC_OUTPUT([Makefile src/Makefile])
+AC_OUTPUT([Makefile src/Makefile examples/Makefile])
